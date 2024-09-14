@@ -17,8 +17,7 @@ RUN luarocks install lua-resty-prometheus
 RUN luarocks install lua-resty-http
 RUN luarocks install lua-resty-lock
 
-# Removed installation of lua-resty-openidc and lua-resty-jwt
-
+# Copy configuration files
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY lua/ /usr/local/openresty/lualib/custom/
 
