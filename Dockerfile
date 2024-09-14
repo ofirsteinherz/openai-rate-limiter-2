@@ -1,13 +1,23 @@
-FROM openresty/openresty:alpine
+FROM openresty/openresty:buster
 
-RUN opm get kong/lua-resty-prometheus
-RUN opm get ledgetech/lua-resty-http
-RUN opm get openresty/lua-resty-lock
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    luarocks \
+    git \
+    build-essential \
+    libssl-dev \
+    liblua5.1-0-dev \
+    ca-certificates
 
-# Install LuaRocks and additional Lua libraries
-RUN apk add --no-cache lua5.1-dev luarocks openssl-dev
-RUN luarocks install lua-resty-openidc
-RUN luarocks install lua-resty-jwt
+# Configure git to use HTTPS instead of git protocol
+RUN git config --global url."https://".insteadOf git://
+
+# Install Lua modules via luarocks
+RUN luarocks install lua-resty-prometheus
+RUN luarocks install lua-resty-http
+RUN luarocks install lua-resty-lock
+
+# Removed installation of lua-resty-openidc and lua-resty-jwt
 
 COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY lua/ /usr/local/openresty/lualib/custom/
