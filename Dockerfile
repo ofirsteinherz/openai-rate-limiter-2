@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     liblua5.1-0-dev \
     ca-certificates
 
-# Configure git to use HTTPS instead of git protocol
+# Configure Git to use HTTPS instead of git://
 RUN git config --global url."https://".insteadOf git://
 
 # Install Lua modules via luarocks
@@ -22,4 +22,6 @@ COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
 COPY lua/ /usr/local/openresty/lualib/custom/
 
 EXPOSE 80
-CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
+
+# Start OpenResty and specify the configuration file
+CMD ["openresty", "-g", "daemon off;", "-c", "/usr/local/openresty/nginx/conf/nginx.conf"]

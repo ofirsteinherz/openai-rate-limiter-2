@@ -1,6 +1,7 @@
 services:
   openresty:
-    build: .
+    build:
+      context: .
     volumes:
       - ./nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
       - ./lua/:/usr/local/openresty/lualib/custom/
